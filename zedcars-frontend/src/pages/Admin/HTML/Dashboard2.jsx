@@ -336,7 +336,7 @@ const Dashboard2 = () => {
               <div className="admin-section-responsive">
                 <div className="section-header">
                   <h2>Recent Test Drives</h2>
-                  <a href="/Admin/TestDrives" className="view-all">
+                  <a href="/Admin/test-drives" className="view-all">
                     View All →
                   </a>
                 </div>

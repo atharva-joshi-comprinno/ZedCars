@@ -34,12 +34,9 @@ const HomeInventory = () => {
     totalCars,
   } = data;
 
-  // ✅ Fetch inventory data
   const fetchInventoryData = async (page = 1, filters = {}) => {
     try {
       setLoading(true);
-
-      // Construct query params matching backend parameter names exactly
       const params = new URLSearchParams({
         brand: filters.brand || "",
         priceRange: filters.priceRange || "",
@@ -49,8 +46,6 @@ const HomeInventory = () => {
       });
 
       const response = await apiClient.get(`/home/inventory?${params}`);
-
-      // ✅ Normalize response keys (match React casing)
       setData({
         cars: response.data.cars || [],
         brands: response.data.brands || [],
@@ -64,18 +59,16 @@ const HomeInventory = () => {
         totalCars: response.data.totalCars || 0,
       });
     } catch (error) {
-      console.error("❌ Error fetching inventory:", error);
+      console.error("Error fetching inventory:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Initial load
   useEffect(() => {
     fetchInventoryData();
   }, []);
 
-  // ✅ Filter submit
   const handleFilterSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -87,197 +80,140 @@ const HomeInventory = () => {
     fetchInventoryData(1, filters);
   };
 
-  // ✅ Handle page change (preserve current filters)
   const handlePageChange = (page) => {
-    const filters = {
+    fetchInventoryData(page, {
       brand: selectedBrand,
       priceRange: selectedPriceRange,
       fuelType: selectedFuelType,
-    };
-    fetchInventoryData(page, filters);
+    });
   };
 
   if (loading) {
-    return <div className="loading">Loading inventory...</div>;
+    return <div className="home-inv-loading">Loading inventory...</div>;
   }
 
   return (
-    <div className="inventory-page">
-      {/* Header */}
-      <div className="page-header">
-        <h1>Vehicle Inventory</h1>
-        <p>Browse our selection of quality vehicles</p>
-      </div>
+    <div className="home-inv-container">
+      <header className="home-inv-header">
+        <h1 className="home-inv-title">Vehicle Inventory</h1>
+        <p className="home-inv-subtitle">Browse our selection of quality vehicles</p>
+      </header>
 
-      {/* Filter Form */}
-      <form className="filter-form" onSubmit={handleFilterSubmit}>
-        <div className="filter-grid">
-          <select
-            name="brand"
-            className="form-select"
-            defaultValue={selectedBrand}
-          >
-            <option value="">All Brands</option>
-            {brands.map((b, i) => (
-              <option key={i} value={b}>
-                {b}
-              </option>
-            ))}
-          </select>
+      <form className="home-inv-filters" onSubmit={handleFilterSubmit}>
+        <select name="brand" className="home-inv-select" defaultValue={selectedBrand}>
+          <option value="">All Brands</option>
+          {brands.map((b, i) => (
+            <option key={i} value={b}>{b}</option>
+          ))}
+        </select>
 
-          <select
-            name="priceRange"
-            className="form-select"
-            defaultValue={selectedPriceRange}
-          >
-            <option value="">All Prices</option>
-            <option value="0-20000">$0 - $20,000</option>
-            <option value="20001-30000">$20,001 - $30,000</option>
-            <option value="30001-40000">$30,001 - $40,000</option>
-            <option value="40001-50000">$40,001 - $50,000</option>
-            <option value="50001-60000">$50,001 - $60,000</option>
-          </select>
+        <select name="priceRange" className="home-inv-select" defaultValue={selectedPriceRange}>
+          <option value="">All Prices</option>
+          <option value="0-20000">$0 - $20,000</option>
+          <option value="20001-30000">$20,001 - $30,000</option>
+          <option value="30001-40000">$30,001 - $40,000</option>
+          <option value="40001-50000">$40,001 - $50,000</option>
+          <option value="50001-60000">$50,001 - $60,000</option>
+        </select>
 
-          <select
-            name="fuelType"
-            className="form-select"
-            defaultValue={selectedFuelType}
-          >
-            <option value="">All Fuel Types</option>
-            {fuelTypes.map((f, i) => (
-              <option key={i} value={f}>
-                {f}
-              </option>
-            ))}
-          </select>
+        <select name="fuelType" className="home-inv-select" defaultValue={selectedFuelType}>
+          <option value="">All Fuel Types</option>
+          {fuelTypes.map((f, i) => (
+            <option key={i} value={f}>{f}</option>
+          ))}
+        </select>
 
-          <button type="submit" className="btn btn-primary">
-            Filter
-          </button>
-        </div>
+        <button type="submit" className="home-inv-filter-btn">Apply Filters</button>
       </form>
 
-      {/* Vehicle Grid */}
-      <div className="inventory-grid">
+      <div className="home-inv-grid">
         {cars.length > 0 ? (
           cars.map((car) => (
-            <div
-              className="vehicle-card"
+            <article
+              className="home-inv-card"
               key={car.id}
               onClick={() => navigate(`/vehicle/${car.carId || car.id}`)}
-              style={{ cursor: "pointer" }}
             >
-              <div className="vehicle-image">
+              <div className="home-inv-img-wrapper">
                 <img
-                  // src={car.imageUrl || "https://via.placeholder.com/300x200?text=No+Image"}
-                  src={
-                    getFirstImageUrl(car.imageUrl) ||
-                    "https://via.placeholder.com/300x200?text=No+Image"
-                  }
+                  src={getFirstImageUrl(car.imageUrl) || "https://via.placeholder.com/300x200?text=No+Image"}
                   alt={`${car.make} ${car.model}`}
+                  className="home-inv-img"
                 />
                 {car.stockQuantity <= 0 && (
-                  <div className="out-of-stock-overlay">Out of Stock</div>
+                  <div className="home-inv-out-of-stock">Out of Stock</div>
                 )}
               </div>
-              <div className="vehicle-info">
-                <h3>
-                  {car.make} {car.model}
-                </h3>
-                {car.year && <p className="vehicle-year">{car.year}</p>}
+              
+              <div className="home-inv-content">
+                <h3 className="home-inv-car-name">{car.make} {car.model}</h3>
+                {car.year && <p className="home-inv-year">{car.year}</p>}
 
-                <div className="vehicle-details">
-                  {car.fuelType && (
-                    <span className="detail-item">{car.fuelType}</span>
-                  )}
-                  {car.transmission && (
-                    <span className="detail-item">{car.transmission}</span>
-                  )}
-                  {car.mileage && (
-                    <span className="detail-item">
-                      {car.mileage.toLocaleString()} miles
-                    </span>
-                  )}
+                <div className="home-inv-specs">
+                  {car.fuelType && <span className="home-inv-badge">{car.fuelType}</span>}
+                  {car.transmission && <span className="home-inv-badge">{car.transmission}</span>}
+                  {car.mileage && <span className="home-inv-badge">{car.mileage.toLocaleString()} mi</span>}
                 </div>
 
-                <div className="vehicle-price">
-                  <span className="inventory-price">
-                    ${car.price?.toLocaleString()}
-                  </span>
-                  <span className="stock">Stock: {car.stockQuantity}</span>
+                <div className="home-inv-footer">
+                  <span className="home-inv-price">${car.price?.toLocaleString()}</span>
+                  <span className="home-inv-stock">Stock: {car.stockQuantity}</span>
                 </div>
 
-                <div className="vehicle-actions">
-                  <button
-                    onClick={() => navigate(`/vehicle/${car.carId || car.id}`)}
-                    className="btn btn-primary"
-                  >
-                    View Details
-                  </button>
-                </div>
+                <button 
+                  className="home-inv-view-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/vehicle/${car.carId || car.id}`);
+                  }}
+                >
+                  View Details
+                </button>
               </div>
-            </div>
+            </article>
           ))
         ) : (
-          <div className="no-vehicles">
+          <div className="home-inv-empty">
             <h3>No vehicles available</h3>
             <p>Please check back later for new inventory.</p>
           </div>
         )}
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
-        <>
-          <nav className="pagination-nav">
-            <ul className="pagination">
-              <li
-                key="prev"
-                className={`page-item ${currentPage <= 1 ? "disabled" : ""}`}
-              >
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage <= 1}
-                >
-                  &laquo;
-                </button>
-              </li>
+        <div className="home-inv-pagination-wrapper">
+          <nav className="home-inv-pagination">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage <= 1}
+              className="home-inv-page-btn"
+            >
+              Previous
+            </button>
 
-              {Array.from({ length: totalPages }, (_, i) => (
-                <li
-                  key={`page-${i + 1}`}
-                  className={`page-item ${
-                    i + 1 === currentPage ? "active" : ""
-                  }`}
-                >
-                  <button onClick={() => handlePageChange(i + 1)}>
-                    {i + 1}
-                  </button>
-                </li>
-              ))}
-
-              <li
-                key="next"
-                className={`page-item ${
-                  currentPage >= totalPages ? "disabled" : ""
-                }`}
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => handlePageChange(i + 1)}
+                className={`home-inv-page-btn ${i + 1 === currentPage ? "home-inv-active" : ""}`}
               >
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage >= totalPages}
-                >
-                  &raquo;
-                </button>
-              </li>
-            </ul>
+                {i + 1}
+              </button>
+            ))}
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage >= totalPages}
+              className="home-inv-page-btn"
+            >
+              Next
+            </button>
           </nav>
 
-          <div className="pagination-info">
-            Showing {(currentPage - 1) * pageSize + 1}–
-            {Math.min(currentPage * pageSize, totalCars)} of {totalCars}{" "}
-            vehicles
-          </div>
-        </>
+          <p className="home-inv-page-info">
+            Showing {(currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, totalCars)} of {totalCars} vehicles
+          </p>
+        </div>
       )}
     </div>
   );
