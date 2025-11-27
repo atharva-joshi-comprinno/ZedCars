@@ -1,0 +1,152 @@
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: white;
+  color: #1a1a1a;
+  margin-top: 5vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.login-form {
+  flex: 1;
+  max-width: 43vw;
+  margin: auto;
+  margin-top: 5vw;
+  margin-bottom: 5vw;
+  padding: 2.5rem;
+  background: #f5f7fa;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.288);
+  border: 1px 1px outset black;
+}
+
+.login-form h1 {
+  margin-bottom: 0.5rem;
+  color: #111111;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #555555;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.login-form-group {
+  margin-bottom: 1.2rem;
+}
+
+.login-form-group label {
+  display: block;
+  font-weight: 500;
+  color: #333333;
+}
+
+.login-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d0d5dd;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.login-input:focus {
+  border-color: #4f46e5; /* Indigo nice highlight */
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #555555;
+  font-size: 0.9rem;
+}
+
+.login-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background-color: #4f46e5; /* Elegant Indigo */
+  color: #ffffff;
+  width: 100%;
+}
+
+.login-btn:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+}
+
+.error-message {
+  color: #d92d20;
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.form-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: #3b3636;
+}
+
+.form-footer p{
+  color: #4e4e4e;
+}
+
+.form-footer a {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .login-form {
+    box-shadow: none;
+    border-radius: 0;
+    max-width: 100%;
+    height: 100vh;
+    justify-content: center;
+  }
+}
+
+
+.register-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background-color: #4f46e5; /* Elegant Indigo */
+  color: #ffffff;
+  width: 100%;
+}
+
+.register-btn:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+}
+
+.error-text {
+  color: #dc3545;
+  font-size: 0.875rem;
+  display: block;
+  margin-top: 5px;
+}

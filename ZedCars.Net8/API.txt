@@ -1,0 +1,485 @@
+ZedCars .NET 8 REST API Documentation
+=====================================
+
+Base URL: http://localhost:5117
+
+AUTHENTICATION CONTROLLER APIs
+==============================
+
+Base URL: http://localhost:5117/api/auth
+
+Login
+POST /login
+Content-Type: application/json
+
+Request Body:
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+Response:
+{
+  "accessToken": "jwt_token_here",
+  "refreshToken": "refresh_token_here",
+  "user": {
+    "adminId": 1,
+    "username": "admin",
+    "email": "admin@example.com",
+    "fullName": "Administrator",
+    "role": "SuperAdmin"
+  }
+}
+
+Register
+POST /register
+Content-Type: application/json
+
+Request Body:
+{
+  "fullName": "John Doe",
+  "email": "john@example.com",
+  "username": "johndoe",
+  "password": "password123"
+}
+
+Response:
+{
+  "message": "Registration successful"
+}
+
+Refresh Token
+POST /refresh
+Content-Type: application/json
+
+Request Body:
+{
+  "refreshToken": "your_refresh_token_here"
+}
+
+Response:
+{
+  "accessToken": "new_jwt_token_here",
+  "refreshToken": "new_refresh_token_here"
+}
+
+Logout
+POST /logout
+Authorization: Bearer {jwt_token}
+Content-Type: application/json
+
+Request Body:
+{
+  "refreshToken": "your_refresh_token_here"
+}
+
+Response:
+{
+  "message": "Logged Out Successfully"
+}
+
+Revoke Token
+POST /revoke
+Authorization: Bearer {jwt_token}
+Content-Type: application/json
+
+Request Body:
+{
+  "refreshToken": "your_refresh_token_here"
+}
+
+Response:
+{
+  "message": "Token revoked"
+}
+
+SAMPLE CREDENTIALS
+=================
+
+Admin User:
+- Username: admin
+- Password: admin123
+
+Regular User:
+- Username: user1
+- Password: password1
+
+HOME CONTROLLER APIs
+===================
+
+PUBLIC ENDPOINTS (No Authentication Required)
+=============================================
+
+Health Check
+GET /api/home/status
+
+Dashboard Data
+GET /api/home
+
+About Information
+GET /api/home/about
+
+Contact Information
+GET /api/home/contact
+
+Direct Test
+GET /api/home/direct
+
+Test Endpoint
+GET /api/home/test
+
+JWT Test
+GET /api/home/jwt-test
+
+Vehicle Details (Public)
+GET /api/home/vehicle/{id}
+Example: GET /api/home/vehicle/1
+
+Accessories List (Public)
+GET /api/home/accessories
+
+PROTECTED ENDPOINTS (JWT Authentication Required)
+===============================================
+
+Vehicle Inventory
+GET /api/home/inventory
+GET /api/home/inventory?brand=Toyota
+GET /api/home/inventory?priceRange=low
+GET /api/home/inventory?fuelType=Petrol
+GET /api/home/inventory?page=2
+GET /api/home/inventory?brand=Toyota&page=1&fuelType=Petrol
+
+User Purchases
+GET /api/home/purchases
+Authorization: Bearer {jwt_token}
+
+User Test Drives
+GET /api/home/testdrives
+Authorization: Bearer {jwt_token}
+
+Test Drive Details
+GET /api/home/testdrive/{id}
+Authorization: Bearer {jwt_token}
+Example: GET /api/home/testdrive/1
+
+Purchase Form Data
+GET /api/home/purchase/{id}
+Authorization: Bearer {jwt_token}
+Example: GET /api/home/purchase/1
+
+POST ENDPOINTS
+==============
+
+Purchase Vehicle
+POST /api/home/purchase
+Authorization: Bearer {jwt_token}
+Content-Type: application/json
+
+Request Body:
+{
+  "purchase": {
+    "carId": 1,
+    "buyerName": "John Doe",
+    "buyerEmail": "john@example.com",
+    "purchaseQuantity": 1
+  },
+  "selectedAccessories": ["GPS", "Sunroof"]
+}
+
+Purchase Accessories Only
+POST /api/home/accessories
+Authorization: Bearer {jwt_token}
+Content-Type: application/json
+
+Request Body:
+{
+  "buyerName": "John Doe",
+  "buyerEmail": "john@example.com",
+  "selectedAccessories": ["GPS", "Sunroof", "Leather Seats"]
+}
+
+Book Test Drive
+POST /api/home/testdrive
+Authorization: Bearer {jwt_token}
+Content-Type: application/json
+
+Request Body:
+{
+  "carId": 1,
+  "customerName": "John Doe",
+  "customerEmail": "john@example.com",
+  "bookingDate": "2024-12-15",
+  "timeSlot": "10:00 AM"
+}
+
+Book Test Drive (Alternative)
+POST /api/home/book-testdrive
+Authorization: Bearer {jwt_token}
+Content-Type: application/json
+
+Request Body:
+{
+  "carId": 1,
+  "customerName": "John Doe",
+  "customerEmail": "john@example.com",
+  "bookingDate": "2024-12-15",
+  "timeSlot": "2:00 PM"
+}
+
+TESTING SEQUENCE
+===============
+
+1. Login to get JWT token:
+   POST /api/auth/login
+
+2. Copy accessToken from response
+
+3. Set Authorization header in Postman:
+   Type: Bearer Token
+   Token: {paste_access_token_here}
+
+4. Test public endpoints (no auth needed):
+   GET /api/home/status
+   GET /api/home/about
+   GET /api/home/vehicle/1
+
+5. Test protected endpoints (with JWT):
+   GET /api/home/inventory
+   GET /api/home/purchases
+   GET /api/home/testdrives
+
+6. Test POST operations (with JWT):
+   POST /api/home/purchase
+   POST /api/home/testdrive
+   POST /api/home/accessories
+
+ADMIN CONTROLLER APIs
+====================
+
+Base URL: http://localhost:5117/api/admin
+
+Dashboard & Analytics
+GET /dashboard
+- Returns admin dashboard data with vehicle counts, sales stats, recent activities
+- Response: JSON with ActiveVehicles, TotalCars, TotalSales, RecentInventory, etc.
+
+GET /sales-data?period=month
+- Returns sales analytics by brand and monthly trends
+- Query params: period (week|month|quarter|year)
+- Response: JSON with SalesByBrand, MonthlySales, InventoryTurnover
+
+GET /stock-data?period=month  
+- Returns stock vs sold data by brand
+- Query params: period (week|month|quarter|year)
+- Response: JSON with StockData (available vs sold by brand)
+
+Vehicle Management
+GET /inventory?brand=Toyota&page=1
+- Returns paginated vehicle inventory with filtering
+- Query params: brand (optional), page (default: 1)
+- Response: JSON with Cars array, Brands, pagination info
+
+GET /vehicles/{id}
+- Returns specific vehicle details by ID
+- Path param: id (vehicle ID)
+- Response: JSON vehicle object or 404 if not found
+
+POST /vehicles
+- Creates new vehicle
+- Body: JSON Car object with Brand, Model, Price, etc.
+- Response: 201 Created with vehicle data
+
+        Request Body:
+        {
+          "brand": "Toyota",
+          "model": "Camry",
+          "year": 2024,
+          "price": 25000.00,
+          "fuelType": "Petrol",
+          "transmission": "Automatic",
+          "mileage": 15.5,
+          "color": "White",
+          "description": "Brand new Toyota Camry with excellent features",
+          "imageUrl": "https://example.com/camry.jpg",
+          "isAvailable": true
+        }
+
+PUT /vehicles/{id}
+- Updates existing vehicle
+- Path param: id, Body: JSON Car object
+- Response: 200 OK with updated vehicle or 404 if not found
+
+DELETE /vehicles/{id}
+- Deletes vehicle by ID
+- Path param: id (vehicle ID)
+- Response: 204 No Content or 404 if not found
+
+User Management
+GET /users
+- Returns all admin users
+- Response: JSON array of Admin objects
+
+GET /users/{id}
+- Returns specific admin user by ID
+- Path param: id (admin ID)
+- Response: JSON Admin object or 404 if not found
+
+POST /users
+- Creates new admin user
+- Body: JSON Admin object with Username, Email, Role, etc.
+- Response: 201 Created with user data
+
+        Request Body:
+        {
+          "username": "newadmin",
+          "email": "newadmin@example.com",
+          "fullName": "New Admin User",
+          "role": "Admin",
+          "password": "securePassword123"
+        }
+
+
+PUT /users/{id}
+- Updates existing admin user
+- Path param: id, Body: JSON Admin object
+- Response: 200 OK with updated user or 404 if not found
+
+DELETE /users/{id}
+- Deletes admin user by ID
+- Path param: id (admin ID)
+- Response: 204 No Content or 404 if not found
+
+Activities & Test Drives
+GET /activities
+- Returns recent user activities
+- Response: JSON array of UserActivity objects
+
+POST /testdrives/{testDriveId}/status
+- Updates test drive status
+- Path param: testDriveId, Body: JSON string status
+- Response: 200 OK with success message
+
+        Request Body:
+        "Confirmed"
+
+        Available status values: "Pending", "Confirmed", "Completed", "Cancelled"
+
+SAMPLE USERS
+===========
+
+SuperAdmin:
+- Username: admin1
+- Password: password123
+- Role: SuperAdmin
+
+Customer:
+- Username: Customer3
+- Password: password
+- Role: Customer
+
+ERROR RESPONSES
+==============
+
+401 Unauthorized:
+{
+  "message": "Invalid credentials"
+}
+
+404 Not Found:
+{
+  "message": "Resource not found"
+}
+
+400 Bad Request:
+{
+  "message": "Validation error message"
+}
+
+SUCCESS RESPONSES
+================
+
+200 OK:
+{
+  "message": "Operation successful",
+  "data": {...}
+}
+
+NOTES
+=====
+
+- All protected endpoints require JWT token in Authorization header
+- JWT tokens expire after configured time
+- Use refresh token to get new access token
+- Public endpoints can be accessed without authentication
+- Vehicle IDs start from 1
+- Date format: YYYY-MM-DD
+- Time slots: "10:00 AM", "2:00 PM", etc.
+
+ACCESSORY CONTROLLER APIs
+========================
+
+Base URL: http://localhost:5117/api/accessory
+
+Accessory Management
+GET /
+- Returns paginated accessories list with filtering
+- Query params: category (optional), page (default: 1)
+- Response: JSON with Accessories array, Categories, pagination info
+
+        Example: GET /api/accessory?category=Electronics&page=1
+        Response:
+        {
+          "accessories": [...],
+          "categories": ["Electronics", "Interior", "Exterior"],
+          "currentPage": 1,
+          "pageSize": 6,
+          "totalPages": 3,
+          "totalAccessories": 15,
+          "selectedCategory": "Electronics"
+        }
+
+GET /{id}
+- Returns specific accessory details by ID
+- Path param: id (accessory ID)
+- Response: JSON accessory object or 404 if not found
+
+        Example: GET /api/accessory/5
+
+POST /
+- Creates new accessory (SuperAdmin/Manager only)
+- Body: JSON Accessory object
+- Response: 201 Created with accessory data
+
+        Request Body:
+        {
+          "name": "Car Charger",
+          "category": "Electronics",
+          "price": 29.99,
+          "stockQuantity": 50,
+          "description": "USB car charger with dual ports",
+          "partNumber": "CC001",
+          "manufacturer": "TechCorp",
+          "isActive": true
+        }
+
+PUT /{id}
+- Updates existing accessory (SuperAdmin/Manager only)
+- Path param: id, Body: JSON Accessory object
+- Response: 200 OK with updated accessory or 404 if not found
+
+        Request Body:
+        {
+          "name": "Updated Car Charger",
+          "category": "Electronics",
+          "price": 34.99,
+          "stockQuantity": 45,
+          "description": "Updated USB car charger with fast charging",
+          "partNumber": "CC001",
+          "manufacturer": "TechCorp",
+          "isActive": true
+        }
+
+DELETE /{id}
+- Soft deletes accessory by ID (SuperAdmin/Manager only)
+- Path param: id (accessory ID)
+- Response: 204 No Content or 404 if not found

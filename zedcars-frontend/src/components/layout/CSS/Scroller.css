@@ -1,0 +1,30 @@
+.featured-brands{
+ margin-bottom: 12px;
+ color: black;
+}
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  padding: 20px 0; 
+}
+
+.marquee-content {
+  display: flex;
+  gap: 80px;
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-content img {
+  height: 70px;
+  filter: brightness(1) invert(0);
+  transition: 0.3s ease;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

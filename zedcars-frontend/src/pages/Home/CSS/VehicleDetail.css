@@ -1,0 +1,404 @@
+/* PREMIUM VEHICLE DETAIL PAGE - 2025 DESIGN */
+
+.vd-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: #fafafa;
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  color: #1a1a1a;
+}
+
+.vd-breadcrumb {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+.vd-breadcrumb span { cursor: pointer; }
+.vd-breadcrumb span:hover { color: #000; }
+.vd-breadcrumb .current { color: #000; font-weight: 600; }
+
+/* Hero Section */
+.vd-hero-section {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+  align-items: start;
+}
+
+.vd-image-container {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+.vd-main-image {
+  width: 100%;
+  height: 520px;
+  object-fit: contain;
+  display: block;
+}
+
+.vd-stock-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0,0,0,0.85);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  backdrop-filter: blur(4px);
+}
+
+.vd-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.vd-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.vd-title .variant {
+  font-weight: 400;
+  color: #555;
+  font-size: 2rem;
+}
+
+.vd-price-tag {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #000;
+}
+
+.vd-currency {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+.vd-key-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid #eee;
+}
+
+.vd-key-specs .spec {
+  font-size: 1rem;
+}
+
+.vd-actions {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.vd-btn {
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.vd-btn-primary {
+  background: #000;
+  color: white;
+  border: none;
+}
+
+.vd-btn-primary:hover {
+  background: #111;
+  transform: translateY(-2px);
+}
+
+.vd-btn-outline {
+  background: transparent;
+  color: #000;
+  border: 2px solid #000;
+}
+
+.vd-btn-outline:hover {
+  background: #000;
+  color: white;
+}
+
+.vd-meta-info {
+  font-size: 0.95rem;
+  color: #444;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.vehicle-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 2rem 0;
+  font-family: "Inter", sans-serif;
+}
+
+/* -----------------------------------
+   SPEC BAR (Top Modern Horizontal Bar)
+------------------------------------- */
+.vehicle-modern .vm-spec-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2rem 2.5rem;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  border-radius: 25px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.07);
+  border: 1px solid #e7e7e7;
+}
+
+.vehicle-modern .vm-spec-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 130px;
+}
+
+.vehicle-modern .vm-label {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.vehicle-modern .vm-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-top: 0.2rem;
+}
+
+/* -----------------------------------
+   MODERN CARD
+------------------------------------- */
+.vehicle-modern .vm-card {
+  background: #ffffff;
+  padding: 2.5rem 3rem;
+  border-radius: 28px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.08);
+  border: 1px solid #ededed;
+}
+
+.vehicle-modern .vm-card h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.6rem;
+  font-weight: 700;
+}
+
+.vehicle-modern .vm-card p {
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.8rem;
+}
+
+/* -----------------------------------
+   FEATURES (Modern Tag Style)
+------------------------------------- */
+.vehicle-modern .vm-feature-block {
+  margin-bottom: 2.2rem;
+}
+
+.vehicle-modern .vm-feature-block h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.vehicle-modern .vm-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.vehicle-modern .vm-tags span {
+  background: #f4f4f4;
+  border-radius: 20px;
+  padding: 0.55rem 1.2rem;
+  font-size: 0.9rem;
+  border: 1px solid #e3e3e3;
+  transition: 0.2s ease;
+}
+
+.vehicle-modern .vm-tags span:hover {
+  transform: translateY(-2px);
+  background: #000;
+  color: #fff;
+}
+
+/* Modal */
+.vd-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(5px);
+}
+
+.vd-modal {
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+}
+
+.vd-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.vd-modal-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.vd-modal-header button {
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  cursor: pointer;
+  color: #999;
+}
+
+.vd-form {
+  padding: 2rem;
+}
+
+.vd-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.vd-input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.vd-input-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.vd-input-group input {
+  padding: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+.vd-input-group input:focus {
+  outline: none;
+  border-color: #000;
+}
+
+.vd-time-section label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.vd-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.vd-slot {
+  padding: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.vd-slot input { display: none; }
+
+.vd-slot:hover, .vd-slot.selected {
+  border-color: #000;
+  background: #000;
+  color: white;
+}
+
+.vd-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.vd-modal-footer button {
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.vd-modal-footer button:first-child {
+  background: #f5f5f5;
+  border: 2px solid #ddd;
+  color: #000;
+}
+
+.vd-modal-footer button:last-child {
+  background: #000;
+  color: white;
+  border: none;
+}
+
+/* Loading & Error */
+.vd-loading, .vd-error {
+  text-align: center;
+  padding: 6rem 1rem;
+  font-size: 1.3rem;
+  color: #666;
+}
+
+.vd-error { color: #dc2626; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .vd-hero-section { grid-template-columns: 1fr; }
+  .vd-content { grid-template-columns: 1fr; }
+  .vd-features-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .vd-form-grid, .vd-slots { grid-template-columns: 1fr; }
+  .vd-actions { flex-direction: column; }
+  .vd-btn { width: 100%; }
+  .vd-title { font-size: 2.2rem; }
+  .vd-price-tag { font-size: 2.8rem; }
+}

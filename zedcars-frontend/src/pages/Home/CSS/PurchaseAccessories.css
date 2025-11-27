@@ -1,0 +1,188 @@
+/* ---------- Global Container ---------- */
+.accessory-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 25px;
+  margin-top: 7vh;
+  color: #2c3e50 !important; /* Fix global white font */
+}
+
+.accessory-header h2 {
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 6px;
+  text-align: center;
+  font-size: 28px;
+}
+
+.accessory-card p {
+  color: #7f8c8d;
+  margin-bottom: 25px;
+  font-size: 15px;
+}
+
+/* ---------- Main Card ---------- */
+.accessory-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  border: 1px solid #efefef;
+  transition: 0.3s ease;
+}
+
+.accessory-card:hover {
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+/* ---------- Form Inputs ---------- */
+.form-label {
+  font-weight: 600;
+  margin-bottom: 7px;
+  color: #2c3e50;
+}
+
+.form-control {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #dcdde1;
+  font-size: 15px;
+  transition: 0.25s;
+  color: #2d3436 !important;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #2980b9;
+  box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.18);
+}
+
+/* ---------- Accessory Category Grid ---------- */
+.accessory-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+/* ---------- Category Box ---------- */
+.category-box {
+  background: #f7faff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #dfe6ec;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  transition: 0.25s ease;
+}
+
+.category-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+}
+
+.category-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #2c3e50;
+  border-left: 4px solid #2980b9;
+  padding-left: 10px;
+  margin-bottom: 15px;
+}
+
+/* ---------- Accessory Item ---------- */
+.accessory-item {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 12px;
+  transition: 0.25s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.accessory-item:hover {
+  border-color: #2980b9;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+  transform: scale(1.01);
+}
+
+.accessory-checkbox {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  accent-color: #2980b9;
+}
+
+.accessory-name {
+  font-weight: 600;
+  color: #2c3e50;
+  flex: 1;
+}
+
+.accessory-price {
+  font-weight: 700;
+  color: #27ae60;
+  margin-right: 5px;
+}
+
+.badge-low-stock {
+  background: #f1c40f;
+  color: #000;
+  padding: 4px 7px;
+  border-radius: 8px;
+  font-size: 11px;
+}
+
+/* ---------- Total Summary ---------- */
+.alert-info {
+  background: #e9f5ff;
+  border-left: 4px solid #3498db;
+  color: #2c3e50;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  padding: 12px 26px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-secondary {
+  background: #95a5a6;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #7f8c8d;
+}
+
+.btn-success {
+  background: #27ae60;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #1e874f;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .accessory-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .d-flex {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

@@ -1,0 +1,363 @@
+/* =============================
+   GLOBAL LAYOUT
+============================= */
+.admin-inventory-page {
+  padding: 50px 30px;
+  background: radial-gradient(circle at top left, #f8fbff 0%, #eaf1ff 50%, #f0f4ff 100%);
+  min-height: 100vh;
+  font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+  color: #1a1a1a;
+  letter-spacing: 0.2px;
+  margin-top: 6vh;
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================
+   HEADER
+============================= */
+.admin-page-header {
+  text-align: center;
+  margin-bottom: 60px;
+  padding: 40px 25px;
+  background: linear-gradient(135deg, #0a56e8, #4f9bff);
+  color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(10, 86, 232, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-page-header::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -40%;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  filter: blur(50px);
+}
+
+.admin-page-header h1 {
+  font-size: 2.7rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.admin-page-header p {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
+
+/* =============================
+   FILTER SECTION
+============================= */
+.admin-filter-form {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  padding: 30px 25px;
+  margin-bottom: 50px;
+  border: 1px solid rgba(220, 230, 255, 0.6);
+}
+
+.admin-filter-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 20px;
+}
+
+.admin-form-select {
+  padding: 14px 18px;
+  font-size: 15px;
+  border: 2px solid #cfd8e7;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  min-width: 240px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.admin-form-select:hover {
+  border-color: #0a56e8;
+  box-shadow: 0 0 0 3px rgba(10, 86, 232, 0.1);
+}
+
+.admin-form-select:focus {
+  outline: none;
+  border-color: #0a56e8;
+  box-shadow: 0 0 0 3px rgba(10, 86, 232, 0.2);
+}
+
+/* =============================
+   BUTTONS
+============================= */
+.admin-btn {
+  padding: 12px 26px;
+  border-radius: 10px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.3px;
+}
+
+.admin-btn-success {
+  background: linear-gradient(135deg, #16c47f, #0a9f5d);
+  color: #fff;
+}
+.admin-btn-success:hover {
+  background: linear-gradient(135deg, #12ad6f, #0b8e54);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(22, 196, 127, 0.35);
+}
+
+.admin-btn-primary {
+  background: linear-gradient(135deg, #0a56e8, #4f9bff);
+  color: #fff;
+}
+.admin-btn-primary:hover {
+  background: linear-gradient(135deg, #0849c4, #3d8bff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(10, 86, 232, 0.35);
+}
+
+.admin-btn-danger {
+  background: linear-gradient(135deg, #f73347, #d32434);
+  color: #fff;
+}
+.admin-btn-danger:hover {
+  background: linear-gradient(135deg, #d32434, #b51e2a);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(247, 51, 71, 0.35);
+}
+
+.admin-btn-sm {
+  padding: 9px 18px;
+  font-size: 0.85rem;
+}
+
+/* =============================
+   TABLE SECTION
+============================= */
+.admin-inventory-table {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+  margin-bottom: 40px;
+  padding: 4px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.admin-table thead {
+  background: linear-gradient(135deg, #0a56e8, #3f8fff);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 16px 14px;
+  border-bottom: 1px solid #e5e9f5;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.admin-table th {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.admin-table tbody tr {
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+/* .admin-table tbody tr:hover {
+  background: #f5f9ff;
+  transform: scale(1.01);
+} */
+
+/* Vehicle Image */
+.admin-vehicle-thumbnail {
+  width: 85px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #e5ebf5;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+img{
+  display: grid !important;
+}
+
+/* Stock badge */
+.admin-stock-badge {
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: inline-block;
+  min-width: 50px;
+  text-align: center;
+}
+.admin-stock-badge.in-stock {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+.admin-stock-badge.out-of-stock {
+  background: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+}
+
+/* Action buttons */
+.admin-action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.modal-body p{
+  color: black;
+}
+
+.modal-footer .closeModalbtn {
+  /* border: 2px solid black; */
+  border-radius: 6px;
+  font-weight: 600;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+  color: black;
+  background-color: #3333334b;
+}
+
+.modal-footer .closeModalbtn:hover {
+  background-color: #333333ad;
+  color: black;
+}
+
+
+/* =============================
+   PAGINATION
+============================= */
+.admin-pagination-nav {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.admin-pagination {
+  display: flex;
+  list-style: none;
+  gap: 0.4rem;
+  padding: 0;
+}
+
+.admin-page-item button {
+  padding: 8px 14px;
+  border: 2px solid #0a56e8;
+  border-radius: 8px;
+  background: #fff;
+  color: #0a56e8;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.admin-page-item button:hover:not(:disabled),
+.admin-page-item.active button {
+  background: #0a56e8;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(10, 86, 232, 0.25);
+}
+
+.admin-page-item.disabled button {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.admin-pagination-info {
+  text-align: center;
+  margin-top: 15px;
+  color: #5f5f5f;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* =============================
+   NO VEHICLES + LOADING
+============================= */
+.admin-no-vehicles {
+  text-align: center;
+  padding: 100px 30px;
+  color: #666;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(8px);
+}
+
+.admin-no-vehicles h3 {
+  font-size: 1.8rem;
+  color: #0a56e8;
+  margin-bottom: 10px;
+}
+
+.admin-loading {
+  text-align: center;
+  padding: 100px 20px;
+  font-size: 1.2rem;
+  color: #0a56e8;
+  font-weight: 600;
+}
+
+/* =============================
+   RESPONSIVE DESIGN
+============================= */
+@media (max-width: 992px) {
+  .admin-filter-grid {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-form-select {
+    width: 100%;
+  }
+
+  .admin-inventory-table {
+    overflow-x: auto;
+  }
+
+  .admin-table {
+    min-width: 800px;
+  }
+
+  .admin-action-buttons {
+    flex-direction: column;
+  }
+
+  .admin-btn-sm {
+    width: 100%;
+  }
+}
