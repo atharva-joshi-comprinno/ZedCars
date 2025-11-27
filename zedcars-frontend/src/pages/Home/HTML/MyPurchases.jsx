@@ -56,6 +56,27 @@ const MyPurchases = () => {
     }
   };
 
+  const downloadReceipt = async (purchaseId) => {
+    try {
+      const response = await apiClient.get(`/home/downloadReceipt/${purchaseId}`, {
+        responseType: 'blob'
+      });
+
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Receipt_${purchaseId}_${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Failed to download receipt:', err);
+      setError('Failed to download receipt');
+    }
+    };
+
   if (loading) return <div className="loading">Loading your purchases...</div>;
   if (error) return <div className="error">{error}</div>;
 
@@ -116,11 +137,18 @@ const MyPurchases = () => {
             </div>
 
             <div className="card-actions">
-              <button
+              {/* <button
                 onClick={() => navigate(`/vehicle/${item.car.carId}`)}
                 className="view-details-btn"
               >
                 View Details
+              </button> */}
+
+              <button
+                onClick={() => downloadReceipt(item.purchase.purchaseId)}
+                className="download-receipt-btn"
+              >
+                Download Receipt
               </button>
             </div>
           </>

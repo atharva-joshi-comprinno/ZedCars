@@ -402,3 +402,78 @@
   .vd-title { font-size: 2.2rem; }
   .vd-price-tag { font-size: 2.8rem; }
 }
+
+/* Image Slider Styles */
+.vd-image-slider {
+  position: relative;
+  width: 100%;
+  height: 520px;
+}
+
+.vd-slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.vd-slider-btn:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.vd-prev-btn { left: 15px; }
+.vd-next-btn { right: 15px; }
+
+.vd-image-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.vd-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.vd-dot.active {
+  background: #fff;
+  transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+  .vd-slider-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+  
+  .vd-prev-btn { left: 10px; }
+  .vd-next-btn { right: 10px; }
+  
+  .vd-image-dots {
+    bottom: 15px;
+  }
+  
+  .vd-dot {
+    width: 10px;
+    height: 10px;
+  }
+}

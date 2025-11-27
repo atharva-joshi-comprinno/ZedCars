@@ -16,6 +16,7 @@ const VehicleDetail = () => {
   const [showModal, setShowModal] = useState(false);
   const [availableSlots, setAvailableSlots] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const [testDriveData, setTestDriveData] = useState({
     customerName: "",
@@ -84,7 +85,7 @@ const VehicleDetail = () => {
         ...testDriveData,
         carId: parseInt(id),
       });
-      alert("Test drive booked successfully! We’ll contact you soon.");
+      alert("Test drive booked successfully! We'll contact you soon.");
       setShowModal(false);
       setTestDriveData((prev) => ({
         ...prev,
@@ -104,6 +105,17 @@ const VehicleDetail = () => {
   if (error) return <div className="vd-error">{error}</div>;
   if (!car) return <div className="vd-error">Vehicle not found</div>;
 
+  const allImages = getAllImageUrls(car.imageUrl);
+  const hasMultipleImages = allImages.length > 1;
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
+  };
+
   return (
     <div className="vd-page">
       {/* Breadcrumb */}
@@ -120,14 +132,35 @@ const VehicleDetail = () => {
       {/* Hero Section */}
       <section className="vd-hero-section">
         <div className="vd-image-container">
-          <img
-            src={
-              getFirstImageUrl(car.imageUrl) ||
-              "https://via.placeholder.com/1200x800/111827/ffffff?text=NO+IMAGE"
-            }
-            alt={`${car.brand} ${car.model}`}
-            className="vd-main-image"
-          />
+          {hasMultipleImages ? (
+            <div className="vd-image-slider">
+              <img
+                src={allImages[currentImageIndex] || "https://via.placeholder.com/1200x800/111827/ffffff?text=NO+IMAGE"}
+                alt={`${car.brand} ${car.model} - Image ${currentImageIndex + 1}`}
+                className="vd-main-image"
+              />
+              <button className="vd-slider-btn vd-prev-btn" onClick={prevImage}>‹</button>
+              <button className="vd-slider-btn vd-next-btn" onClick={nextImage}>›</button>
+              <div className="vd-image-dots">
+                {allImages.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`vd-dot ${index === currentImageIndex ? 'active' : ''}`}
+                    onClick={() => setCurrentImageIndex(index)}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : (
+            <img
+              src={
+                getFirstImageUrl(car.imageUrl) ||
+                "https://via.placeholder.com/1200x800/111827/ffffff?text=NO+IMAGE"
+              }
+              alt={`${car.brand} ${car.model}`}
+              className="vd-main-image"
+            />
+          )}
           <div className="vd-stock-badge">
             {car.stockQuantity > 0 ? "In Stock" : "Out of Stock"}
           </div>
