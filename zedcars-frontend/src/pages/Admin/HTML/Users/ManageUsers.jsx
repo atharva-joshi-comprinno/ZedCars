@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import apiClient from "../../../../api/apiClient";
+import ConfirmModal from "../../../../components/ConfirmModal";
+import Toast from "../../../../components/Toast";
 import "../../CSS/ManageUsers.css";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +17,7 @@ const ManageUsers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const pageSize = 10;
 
   useEffect(() => {
@@ -64,8 +67,9 @@ const ManageUsers = () => {
       setUsers(users.filter(user => user.adminId !== selectedUserId));
       setShowModal(false);
       setSelectedUserId(null);
+      setToast({ show: true, message: 'User deleted successfully', type: 'success' });
     } catch (err) {
-      alert("Failed to delete user");
+      setToast({ show: true, message: 'Failed to delete user', type: 'error' });
       console.error(err);
     }
   };
@@ -75,33 +79,43 @@ const ManageUsers = () => {
 
   return (
     <div className="manage-users-container">
+      <Toast show={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
+      <ConfirmModal
+        show={showModal}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this user? This action cannot be undone."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setShowModal(false)}
+        confirmText="Yes, Delete"
+        type="danger"
+      />
+      
       <div className="header">
         <h2>Manage Users</h2>
-              {/* Search and Filter Section */}
-      <div className="search-filter-section">
-        <div className="search-input">
-          <input
-            type="text"
-            placeholder="Search by username or email"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="search-filter-section">
+          <div className="search-input">
+            <input
+              type="text"
+              placeholder="Search by username or email"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="role-filter">
+            <select
+              value={selectedRole}
+              onChange={(e) => setSelectedRole(e.target.value)}
+            >
+              <option value="">All Roles</option>
+              <option value="SuperAdmin">SuperAdmin</option>
+              <option value="Manager">Manager</option>
+              <option value="Customer">Customer</option>
+            </select>
+          </div>
+          <button className="apply-filter-btn" onClick={handleApplyFilter}>
+            Filter
+          </button>
         </div>
-        <div className="role-filter">
-          <select
-            value={selectedRole}
-            onChange={(e) => setSelectedRole(e.target.value)}
-          >
-            <option value="">All Roles</option>
-            <option value="SuperAdmin">SuperAdmin</option>
-            <option value="Manager">Manager</option>
-            <option value="Customer">Customer</option>
-          </select>
-        </div>
-        <button className="apply-filter-btn" onClick={handleApplyFilter}>
-          Filter
-        </button>
-      </div>
         <button 
           className="btn btn-primary"
           onClick={() => navigate("/admin/users/add")}
@@ -164,7 +178,6 @@ const ManageUsers = () => {
         </table>
       </div>
 
-      {/* Pagination */}
       <div className="pagination-container">
         <div className="pagination-info">
           Showing {((currentPage - 1) * pageSize) + 1} to {Math.min(currentPage * pageSize, totalCount)} of {totalCount} users
@@ -197,22 +210,6 @@ const ManageUsers = () => {
           </button>
         </div>
       </div>
-
-      {/* Delete Confirmation Modal */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>Confirm Delete</h3>
-            <p>Are you sure you want to delete this user?</p>
-            <div className="modal-actions">
-              <button onClick={() => setShowModal(false)}>Cancel</button>
-              <button className="delete-confirm" onClick={handleDeleteConfirm}>
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

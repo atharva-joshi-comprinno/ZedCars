@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import apiClient from "../../../../api/apiClient";
+import Toast from "../../../../components/Toast";
 import "../../CSS/UserDetails.css";
 
 const UserDetails = () => {
@@ -8,6 +9,7 @@ const UserDetails = () => {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
 
   useEffect(() => {
     fetchUser();
@@ -18,7 +20,7 @@ const UserDetails = () => {
       const response = await apiClient.get(`/admin/users/${id}`);
       setUser(response.data);
     } catch (err) {
-      alert("Failed to load user data");
+      setToast({ show: true, message: "Failed to load user data", type: "error" });
       navigate("/admin/users");
     } finally {
       setLoading(false);

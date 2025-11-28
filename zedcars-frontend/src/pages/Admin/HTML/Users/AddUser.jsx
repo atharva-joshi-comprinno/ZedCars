@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../../../../api/apiClient";
+import Toast from "../../../../components/Toast";
 import "../../CSS/UserForm.css";
 
 const AddUser = () => {
@@ -18,6 +19,7 @@ const AddUser = () => {
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -107,14 +109,15 @@ const AddUser = () => {
     setLoading(true);
     try {
       const response = await apiClient.post("/admin/users", formData);
-      navigate("/admin/users");
+      setToast({ show: true, message: 'User created successfully!', type: 'success' });
+      setTimeout(() => navigate("/admin/users"), 1500);
     } catch (err) {
       if (err.response?.data?.message?.includes('username')) {
         setErrors(prev => ({ ...prev, username: 'Username already exists' }));
       } else if (err.response?.data?.message?.includes('email')) {
         setErrors(prev => ({ ...prev, email: 'Email already exists' }));
       } else {
-        alert(err.response?.data?.message || "Failed to create user");
+        setToast({ show: true, message: err.response?.data?.message || 'Failed to create user', type: 'error' });
       }
     } finally {
       setLoading(false);
@@ -123,6 +126,7 @@ const AddUser = () => {
 
   return (
     <div className="user-form-container">
+      <Toast show={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
       <div className="form-header">
         <h2>Add New User</h2>
         <button 

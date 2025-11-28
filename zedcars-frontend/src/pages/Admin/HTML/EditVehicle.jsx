@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import apiClient from "../../../api/apiClient";
+import Toast from "../../../components/Toast";
 import "../CSS/AddVehicle.css";
 
 const EditVehicle = () => {
@@ -31,7 +32,8 @@ const EditVehicle = () => {
 
   // Multi-image handling states
   const [imageUrls, setImageUrls] = useState([]); // Array of image URLs for preview
-  const [urlInput, setUrlInput] = useState(""); // Textarea input for adding new URLs
+  const [urlInput, setUrlInput] = useState("");
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" }); // Textarea input for adding new URLs
 
   // Clean and validate URL
   const cleanUrl = (url) => {
@@ -167,7 +169,7 @@ const EditVehicle = () => {
       console.log("Updated imageUrls:", newImageUrls);
     };
     img.onerror = () => {
-      alert(`Failed to load image: ${url}`);
+      setToast({ show: true, message: `Failed to load image: ${url}`, type: "error" });
     };
     img.src = url;
   };
@@ -236,6 +238,7 @@ const EditVehicle = () => {
 
   return (
     <div className="admin-add-vehicle-page">
+      <Toast show={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
       <header className="admin-header">
         <h1>Edit Vehicle</h1>
         <p>Edit an existing vehicle in your inventory.</p>

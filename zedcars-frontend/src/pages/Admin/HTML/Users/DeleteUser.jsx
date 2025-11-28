@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import apiClient from "../../../../api/apiClient";
+import Toast from "../../../../components/Toast";
 import "../../CSS/UserForm.css";
 
 const DeleteUser = () => {
@@ -9,6 +10,7 @@ const DeleteUser = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   useEffect(() => {
     fetchUser();
@@ -19,8 +21,8 @@ const DeleteUser = () => {
       const response = await apiClient.get(`/admin/users/${id}`);
       setUser(response.data);
     } catch (err) {
-      alert("Failed to load user data");
-      navigate("/admin/users");
+      setToast({ show: true, message: 'Failed to load user data', type: 'error' });
+      setTimeout(() => navigate("/admin/users"), 2000);
     } finally {
       setLoading(false);
     }
@@ -30,9 +32,10 @@ const DeleteUser = () => {
     setDeleting(true);
     try {
       await apiClient.delete(`/admin/users/${id}`);
-      navigate("/admin/users");
+      setToast({ show: true, message: 'User deleted successfully', type: 'success' });
+      setTimeout(() => navigate("/admin/users"), 1500);
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to delete user");
+      setToast({ show: true, message: err.response?.data?.message || 'Failed to delete user', type: 'error' });
       setDeleting(false);
     }
   };
@@ -42,6 +45,7 @@ const DeleteUser = () => {
 
   return (
     <div className="user-form-container">
+      <Toast show={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
       <div className="form-header">
         <h2>Delete User</h2>
         <button 

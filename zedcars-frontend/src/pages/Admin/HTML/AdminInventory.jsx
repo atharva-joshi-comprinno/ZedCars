@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import apiClient from "../../../api/apiClient";
 import { getFirstImageUrl } from "../../../utils/imageUtils";
+import Toast from "../../../components/Toast";
 import "../CSS/AdminInventory.css";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +20,7 @@ const AdminInventory = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [selectedCarId, setSelectedCarId] = useState(null);
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
 
   const {
     cars,
@@ -95,9 +97,10 @@ const AdminInventory = () => {
       await apiClient.delete(`/admin/vehicles/${selectedCarId}`);
       closeModal();
       fetchInventoryData(currentPage, { brand: selectedBrand });
+      setToast({ show: true, message: "Vehicle deleted successfully", type: "success" });
     } catch (error) {
       console.error("Error deleting vehicle:", error);
-      alert("Failed to delete vehicle");
+      setToast({ show: true, message: "Failed to delete vehicle", type: "error" });
     } finally {
       setLoading(false);
     }
@@ -109,6 +112,7 @@ const AdminInventory = () => {
 
   return (
     <div className="admin-inventory-page">
+      <Toast show={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
       {/* Header
       <div className="admin-page-header">
         <h1>Vehicle Inventory Management</h1>

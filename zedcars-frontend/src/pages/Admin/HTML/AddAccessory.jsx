@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../../../api/apiClient";
+import Toast from "../../../components/Toast";
 import "../../Admin/CSS/AddAccessory.css"
 
 const AddAccessory = () => {
@@ -18,6 +19,7 @@ const AddAccessory = () => {
   });
 
   const [submitting, setSubmitting] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -34,6 +36,17 @@ const AddAccessory = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (parseFloat(formData.price) <= 0) {
+      setToast({ show: true, message: 'Price must be greater than 0', type: 'error' });
+      return;
+    }
+    
+    if (parseInt(formData.stockQuantity) < 0) {
+      setToast({ show: true, message: 'Stock quantity cannot be negative', type: 'error' });
+      return;
+    }
+    
     setSubmitting(true);
 
     try {
@@ -48,11 +61,11 @@ const AddAccessory = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      alert("Accessory created successfully!");
-      navigate("/Admin/ManageAccessories");
+      setToast({ show: true, message: 'Accessory created successfully!', type: 'success' });
+      setTimeout(() => navigate("/Admin/ManageAccessories"), 1500);
     } catch (error) {
       console.error("Error creating accessory:", error);
-      alert("Failed to create accessory.");
+      setToast({ show: true, message: 'Failed to create accessory', type: 'error' });
     } finally {
       setSubmitting(false);
     }
@@ -60,6 +73,7 @@ const AddAccessory = () => {
 
   return (
     <div className="create-accessory-container">
+      <Toast show={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
       <div className="page-header">
         <h1>Add New Accessory</h1>
         <button className="btn-back" onClick={() => navigate("/Admin/ManageAccessories")}>
@@ -100,6 +114,7 @@ const AddAccessory = () => {
               name="price"
               value={formData.price}
               onChange={handleInputChange}
+              min="0.01"
               required
             />
           </div>
@@ -110,6 +125,7 @@ const AddAccessory = () => {
               name="stockQuantity"
               value={formData.stockQuantity}
               onChange={handleInputChange}
+              min="0"
               required
             />
           </div>

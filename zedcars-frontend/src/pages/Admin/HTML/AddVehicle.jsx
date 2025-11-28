@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../../../api/apiClient";
+import Toast from "../../../components/Toast";
 import "../CSS/AddVehicle.css";
 
 const AddVehicle = () => {
@@ -17,13 +18,12 @@ const AddVehicle = () => {
     transmission: "",
     mileage: "",
     description: "",
-    imageUrl: "", // JSON string of URLs
+    imageUrl: "",
   });
 
   const [message, setMessage] = useState({ type: "", text: "" });
   const [loading, setLoading] = useState(false);
-
-  // Multi-image handling states
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [imageUrls, setImageUrls] = useState([]);
   const [urlInput, setUrlInput] = useState("");
 
@@ -42,7 +42,6 @@ const AddVehicle = () => {
     }
   };
 
-  // Add a single image URL
   const addImageFromUrl = (url) => {
     url = url.trim();
     if (!url || imageUrls.includes(url)) return;
@@ -54,12 +53,11 @@ const AddVehicle = () => {
       setFormData({ ...formData, imageUrl: JSON.stringify(newImageUrls) });
     };
     img.onerror = () => {
-      alert(`Failed to load image: ${url}`);
+      setToast({ show: true, message: `Failed to load image: ${url}`, type: 'error' });
     };
     img.src = url;
   };
 
-  // Add multiple image URLs
   const handleAddImages = () => {
     const text = urlInput.trim();
     if (!text) return;
@@ -69,7 +67,6 @@ const AddVehicle = () => {
     setUrlInput("");
   };
 
-  // Remove an image
   const removeImage = (urlToRemove) => {
     const newImageUrls = imageUrls.filter((u) => u !== urlToRemove);
     setImageUrls(newImageUrls);
@@ -78,6 +75,12 @@ const AddVehicle = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!formData.model || formData.model.trim().length < 2) {
+      setToast({ show: true, message: 'Model must be at least 2 characters', type: 'error' });
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -93,6 +96,7 @@ const AddVehicle = () => {
 
   return (
     <div className="admin-add-vehicle-page">
+      <Toast show={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
       {message.text && (
         <div className={`admin-alert ${message.type === "success" ? "admin-alert-success" : "admin-alert-danger"}`}>
           {message.text}
@@ -103,7 +107,6 @@ const AddVehicle = () => {
         <form onSubmit={handleSubmit} id="admin-vehicle-form">
           <div className="admin-grid">
 
-            {/* LEFT COLUMN */}
             <div className="admin-form-column">
               <h3>Basic Details</h3>
 
@@ -126,7 +129,7 @@ const AddVehicle = () => {
 
               <div className="admin-form-group">
                 <label>Model</label>
-                <input type="text" name="model" value={formData.model} onChange={handleChange} required />
+                <input type="text" name="model" value={formData.model} onChange={handleChange} minLength="2" required />
               </div>
 
               <div className="admin-form-group">
@@ -181,7 +184,6 @@ const AddVehicle = () => {
               </div>
             </div>
 
-            {/* RIGHT COLUMN */}
             <div className="admin-form-column">
               <h3>Images & Description</h3>
 

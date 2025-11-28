@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import apiClient from "../../../../api/apiClient";
+import Toast from "../../../../components/Toast";
 import "../../CSS/UserForm.css";
 
 const EditUser = () => {
@@ -20,6 +21,7 @@ const EditUser = () => {
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [errors, setErrors] = useState({});
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   useEffect(() => {
     fetchUser();
@@ -30,11 +32,11 @@ const EditUser = () => {
       const response = await apiClient.get(`/admin/users/${id}`);
       setFormData({
         ...response.data,
-        password: "" // Don't show existing password
+        password: ""
       });
     } catch (err) {
-      alert("Failed to load user data");
-      navigate("/admin/users");
+      setToast({ show: true, message: 'Failed to load user data', type: 'error' });
+      setTimeout(() => navigate("/admin/users"), 2000);
     } finally {
       setFetchLoading(false);
     }
@@ -42,18 +44,54 @@ const EditUser = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+    if (name === 'fullName') {
+      const lettersOnly = value.replace(/[^a-zA-Z\s]/g, '');
+      setFormData(prev => ({ ...prev, [name]: lettersOnly }));
+    } else if (name === 'phoneNumber') {
+      const numbersOnly = value.replace(/[^0-9]/g, '').slice(0, 10);
+      setFormData(prev => ({ ...prev, [name]: numbersOnly }));
+    } else if (name === 'username') {
+      const alphanumeric = value.replace(/[^a-zA-Z0-9_]/g, '');
+      setFormData(prev => ({ ...prev, [name]: alphanumeric }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      }));
+    }
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.username.trim()) newErrors.username = "Username is required";
-    if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    if (!formData.role.trim()) newErrors.role = "Role is required";
+    
+    if (!formData.username.trim()) {
+      newErrors.username = "Username is required";
+    } else if (formData.username.length < 3) {
+      newErrors.username = "Username must be at least 3 characters";
+    }
+    
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Full name is required";
+    } else if (!/^[a-zA-Z\s]+$/.test(formData.fullName)) {
+      newErrors.fullName = "Full name can only contain letters";
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+    
+    if (formData.phoneNumber && formData.phoneNumber.length !== 10) {
+      newErrors.phoneNumber = "Phone number must be 10 digits";
+    }
+    
+    if (!formData.role.trim()) {
+      newErrors.role = "Role is required";
+    }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -70,18 +108,16 @@ const EditUser = () => {
         adminId: parseInt(id)
       };
       
-      // If password is empty, send a placeholder (backend should handle this)
       if (!updateData.password || !updateData.password.trim()) {
         updateData.password = "KEEP_EXISTING_PASSWORD";
       }
       
-      console.log('Updating user with data:', updateData);
       await apiClient.put(`/admin/users/${id}`, updateData);
-      alert('User updated successfully!');
-      navigate("/admin/users");
+      setToast({ show: true, message: 'User updated successfully!', type: 'success' });
+      setTimeout(() => navigate("/admin/users"), 1500);
     } catch (err) {
       console.error('Update error:', err.response?.data);
-      alert(err.response?.data?.message || "Failed to update user");
+      setToast({ show: true, message: err.response?.data?.message || 'Failed to update user', type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -91,6 +127,7 @@ const EditUser = () => {
 
   return (
     <div className="user-form-container">
+      <Toast show={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
       <div className="form-header">
         <h2>Edit User</h2>
         <button 
@@ -111,6 +148,7 @@ const EditUser = () => {
               value={formData.username}
               onChange={handleChange}
               className={errors.username ? 'error' : ''}
+              maxLength="20"
             />
             {errors.username && <span className="error-text">{errors.username}</span>}
           </div>
@@ -182,7 +220,11 @@ const EditUser = () => {
               name="phoneNumber"
               value={formData.phoneNumber || ""}
               onChange={handleChange}
+              placeholder="10 digits"
+              maxLength="10"
+              className={errors.phoneNumber ? 'error' : ''}
             />
+            {errors.phoneNumber && <span className="error-text">{errors.phoneNumber}</span>}
           </div>
 
           <div className="form-group full-width">

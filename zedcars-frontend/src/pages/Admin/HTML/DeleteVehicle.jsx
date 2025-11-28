@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import apiClient from "../../../api/apiClient";
+import Toast from "../../../components/Toast";
 
 const DeleteVehicle = () => {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ const DeleteVehicle = () => {
   const [vehicle, setVehicle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
 
   useEffect(() => {
     const fetchVehicle = async () => {
@@ -35,7 +37,7 @@ const DeleteVehicle = () => {
       navigate("/Admin/AdminInventory");
     } catch (error) {
       console.error("Error deleting vehicle:", error);
-      alert("Failed to delete vehicle");
+      setToast({ show: true, message: "Failed to delete vehicle", type: "error" });
     } finally {
       setDeleting(false);
     }
@@ -51,6 +53,7 @@ const DeleteVehicle = () => {
 
   return (
     <div className="delete-vehicle-page">
+      <Toast show={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
       <div className="container mt-5">
         <div className="row justify-content-center">
           <div className="col-md-8">

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import apiClient from "../../../api/apiClient";
+import Toast from "../../../components/Toast";
 import "../CSS/EditAccessories.css";
-import { color } from "chart.js/helpers";
 
 const EditAccessories = () => {
   const { id } = useParams();
@@ -12,6 +12,7 @@ const EditAccessories = () => {
 
   const [accessory, setAccessory] = useState(accessoryFromState || null);
   const [loading, setLoading] = useState(!accessoryFromState);
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -23,7 +24,6 @@ const EditAccessories = () => {
     isActive: true,
   });
 
-  // Fetch accessory details if not passed via state
   useEffect(() => {
     if (!accessoryFromState) {
       fetchAccessoryDetails();
@@ -62,6 +62,17 @@ const EditAccessories = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (parseFloat(formData.price) <= 0) {
+      setToast({ show: true, message: 'Price must be greater than 0', type: 'error' });
+      return;
+    }
+    
+    if (parseInt(formData.stockQuantity) < 0) {
+      setToast({ show: true, message: 'Stock quantity cannot be negative', type: 'error' });
+      return;
+    }
+    
     try {
       const token = localStorage.getItem("jwtToken");
       const payload = {
@@ -74,11 +85,11 @@ const EditAccessories = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      alert("Accessory updated successfully!");
-      navigate("/Admin/ManageAccessories");
+      setToast({ show: true, message: 'Accessory updated successfully!', type: 'success' });
+      setTimeout(() => navigate("/Admin/ManageAccessories"), 1500);
     } catch (error) {
       console.error("Error updating accessory:", error);
-      alert("Failed to update accessory.");
+      setToast({ show: true, message: 'Failed to update accessory', type: 'error' });
     }
   };
 
@@ -86,6 +97,7 @@ const EditAccessories = () => {
 
   return (
     <div className="edit-accessory-container">
+      <Toast show={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
       <div className="page-header">
         <h1>Edit Accessory</h1>
         <button className="btn-back" onClick={() => navigate("/Admin/ManageAccessories")}>
@@ -114,6 +126,7 @@ const EditAccessories = () => {
               name="price"
               value={formData.price}
               onChange={handleInputChange}
+              min="0.01"
               required
             />
           </div>
@@ -124,6 +137,7 @@ const EditAccessories = () => {
               name="stockQuantity"
               value={formData.stockQuantity}
               onChange={handleInputChange}
+              min="0"
               required
             />
           </div>

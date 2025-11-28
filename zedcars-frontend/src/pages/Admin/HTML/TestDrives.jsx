@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import apiClient from '../../../api/apiClient';
+import ConfirmModal from '../../../components/ConfirmModal';
+import Toast from '../../../components/Toast';
 import '../CSS/TestDrive.css';
 
 const TestDrives = () => {
   const [testDrives, setTestDrives] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({ testDriveId: null, newStatus: '' });
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   useEffect(() => {
     loadTestDrives();
@@ -26,18 +31,22 @@ const TestDrives = () => {
     }
   };
 
-  const updateTestDriveStatus = async (testDriveId, newStatus) => {
-    if (!window.confirm(`Are you sure you want to mark this test drive as ${newStatus}?`)) {
-      return;
-    }
+  const handleStatusChange = (testDriveId, newStatus) => {
+    setModalData({ testDriveId, newStatus });
+    setShowModal(true);
+  };
 
+  const confirmStatusChange = async () => {
+    const { testDriveId, newStatus } = modalData;
+    setShowModal(false);
+    
     try {
       await apiClient.post(`/admin/testdrives/${testDriveId}/status`, newStatus);
       await loadTestDrives();
-      alert(`Test drive status updated to ${newStatus}`);
+      setToast({ show: true, message: `Test drive status updated to ${newStatus}`, type: 'success' });
     } catch (err) {
       console.error('Error updating status:', err);
-      alert('Failed to update test drive status. Please try again.');
+      setToast({ show: true, message: 'Failed to update test drive status', type: 'error' });
     }
   };
 
@@ -82,14 +91,14 @@ const TestDrives = () => {
         <div className="td-btn-group">
           <button
             className="td-btn td-btn-success"
-            onClick={() => updateTestDriveStatus(testDrive.testDriveId, 'Confirmed')}
+            onClick={() => handleStatusChange(testDrive.testDriveId, 'Confirmed')}
             title="Confirm"
           >
             ✓
           </button>
           <button
             className="td-btn td-btn-danger"
-            onClick={() => updateTestDriveStatus(testDrive.testDriveId, 'Cancelled')}
+            onClick={() => handleStatusChange(testDrive.testDriveId, 'Cancelled')}
             title="Cancel"
           >
             ✕
@@ -101,14 +110,14 @@ const TestDrives = () => {
         <div className="td-btn-group">
           <button
             className="td-btn td-btn-primary"
-            onClick={() => updateTestDriveStatus(testDrive.testDriveId, 'Completed')}
+            onClick={() => handleStatusChange(testDrive.testDriveId, 'Completed')}
             title="Mark Complete"
           >
             🏁
           </button>
           <button
             className="td-btn td-btn-danger"
-            onClick={() => updateTestDriveStatus(testDrive.testDriveId, 'Cancelled')}
+            onClick={() => handleStatusChange(testDrive.testDriveId, 'Cancelled')}
             title="Cancel"
           >
             ✕
@@ -147,6 +156,17 @@ const TestDrives = () => {
 
   return (
     <div className="test-drives-admin">
+      <Toast show={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
+      <ConfirmModal
+        show={showModal}
+        title="Confirm Status Change"
+        message={`Are you sure you want to mark this test drive as ${modalData.newStatus}?`}
+        onConfirm={confirmStatusChange}
+        onCancel={() => setShowModal(false)}
+        confirmText="Yes, Update"
+        type="warning"
+      />
+      
       <div className="td-header">
         <div className="td-title-section">
           <h2 className="td-page-title">
